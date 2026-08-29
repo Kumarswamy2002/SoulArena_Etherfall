@@ -30,6 +30,8 @@ wheels/
 .pytest_cache/
 .coverage
 htmlcov/
+*-test-results.xml
+*.xml
 
 # Unity
 [Ll]ibrary/

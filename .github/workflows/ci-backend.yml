@@ -57,9 +57,9 @@ jobs:
           DATABASE_URL: postgresql+asyncpg://soularena:soularenapass@localhost:5432/soularenadb
           REDIS_URL: redis://localhost:6379/0
           SECRET_KEY: test-secret-key-for-github-actions-ci-2026
-          PYTHONPATH: .
+          PYTHONPATH: ${{ github.workspace }}
         run: |
-          pytest Backend/tests/ -v --junitxml=backend-test-results.xml
+          python -m pytest -c pytest.ini Backend/tests/ -v --junitxml=backend-test-results.xml
 
       - name: Upload Test Results
         if: always()
