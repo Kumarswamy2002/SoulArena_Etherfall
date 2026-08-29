@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOUL ARENA: ETHERFALL — 3D Combat Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #070913;
+            --bg-secondary: #0d1224;
+            --bg-card: rgba(18, 26, 50, 0.7);
+            --border-glow: rgba(99, 102, 241, 0.3);
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --ether-glow: 0 0 25px rgba(6, 182, 212, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+                linear-gradient(180deg, #070913 0%, #0b0f1f 100%);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            background: rgba(13, 18, 36, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-badge {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            box-shadow: var(--ether-glow);
+        }
+
+        .logo-text h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .btn-api-docs {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            color: #fff;
+            padding: 0.6rem 1.4rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-api-docs:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.6);
+        }
+
+        .hero {
+            padding: 3rem;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 0.4rem 1.2rem;
+            background: rgba(6, 182, 212, 0.12);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
+        }
+
+        .hero h2 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 70%, var(--accent-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            max-width: 760px;
+            margin: 0 auto 2rem auto;
+            line-height: 1.6;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            padding: 1.5rem;
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-cyan);
+            box-shadow: var(--ether-glow);
+        }
+
+        .metric-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .section-header {
+            max-width: 1200px;
+            margin: 0 auto 1.5rem auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .fighter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .fighter-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 18px;
+            padding: 1.5rem;
+            backdrop-filter: blur(14px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .fighter-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 12px 30px rgba(6, 182, 212, 0.25);
+        }
+
+        .fighter-elem-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+
+        .elem-Storm { background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid #06b6d4; }
+        .elem-Ember { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid #f43f5e; }
+        .elem-Frost { background: rgba(147, 197, 253, 0.2); color: #93c5fd; border: 1px solid #60a5fa; }
+        .elem-Volt { background: rgba(250, 204, 21, 0.2); color: #fde047; border: 1px solid #eab308; }
+        .elem-Stone { background: rgba(217, 119, 6, 0.2); color: #fcd34d; border: 1px solid #d97706; }
+        .elem-Void { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid #a855f7; }
+        .elem-Radiance { background: rgba(254, 240, 138, 0.2); color: #fef08a; border: 1px solid #eab308; }
+        .elem-Gale { background: rgba(52, 211, 153, 0.2); color: #6ee7b7; border: 1px solid #10b981; }
+        .elem-Crimson { background: rgba(225, 29, 72, 0.2); color: #fda4af; border: 1px solid #e11d48; }
+        .elem-Nature { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid #22c55e; }
+        .elem-Psionic { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid #ec4899; }
+        .elem-Solar { background: rgba(249, 115, 22, 0.2); color: #fdba74; border: 1px solid #f97316; }
+        .elem-Tidal { background: rgba(14, 165, 233, 0.2); color: #7dd3fc; border: 1px solid #0ea5e9; }
+        .elem-Metal { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid #94a3b8; }
+        .elem-Astral { background: rgba(192, 132, 252, 0.2); color: #e9d5ff; border: 1px solid #c084fc; }
+        .elem-Beast { background: rgba(234, 88, 12, 0.2); color: #fed7aa; border: 1px solid #ea580c; }
+        .elem-Rift { background: rgba(129, 140, 248, 0.2); color: #c7d2fe; border: 1px solid #818cf8; }
+        .elem-Spirit { background: rgba(45, 212, 191, 0.2); color: #99f6e4; border: 1px solid #2dd4bf; }
+        .elem-Death { background: rgba(100, 116, 139, 0.2); color: #94a3b8; border: 1px solid #64748b; }
+        .elem-PrimeEther { background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(139, 92, 246, 0.3)); color: #fde047; border: 1px solid #f59e0b; }
+
+        .fighter-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .fighter-title {
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .fighter-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .console-section {
+            max-width: 1200px;
+            margin: 0 auto 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .console-box {
+            background: #050711;
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            color: #22d3ee;
+            font-size: 0.9rem;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .console-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--text-dim);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-action {
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid var(--accent-cyan);
+            color: #fff;
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            background: var(--accent-cyan);
+            color: #000;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            border-top: 1px solid var(--border-glow);
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            background: rgba(7, 9, 19, 0.95);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <div class="logo-badge">Ω</div>
+            <div class="logo-text">
+                <h1>Soul Arena</h1>
+                <p>Etherfall Engine v1.0</p>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="/" class="nav-link active">Home</a>
+            <a href="/api/v1/characters" class="nav-link" target="_blank">Fighters API</a>
+            <a href="/api/v1/achievements" class="nav-link" target="_blank">Achievements API</a>
+            <a href="/docs" class="btn-api-docs">⚡ Interactive Swagger UI</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-tag">60 FPS Deterministic Simulation & Microservices</div>
+            <h2>Soul Arena: Etherfall</h2>
+            <p>Original-IP 3D fighting arena / action RPG powered by C# gameplay simulation and FastAPI microservices. Featuring 20 Soulforged fighters, 10 dynamic collapsing arenas, and rollback netcode.</p>
+        </section>
+
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">20</div>
+                <div class="metric-label">Original Fighters</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">10</div>
+                <div class="metric-label">Dynamic Arenas</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">56,735+</div>
+                <div class="metric-label">Production LOC</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">60 FPS</div>
+                <div class="metric-label">Deterministic Loop</div>
+            </div>
+        </section>
+
+        <div class="section-header">
+            <div>
+                <h3 class="section-title">Soulforged Roster</h3>
+                <p class="section-subtitle">20 Unique Combatants with Distinct Ether Resonance & Frame Data</p>
+            </div>
+        </div>
+
+        <section class="fighter-grid" id="fighterGrid">
+            <!-- Populated dynamically by JS -->
+        </section>
+
+        <section class="console-section">
+            <div class="console-header">
+                <h3>Live Microservice Telemetry Console</h3>
+                <button class="btn-action" onclick="fetchLiveTelemetry()">Refresh Telemetry</button>
+            </div>
+            <div class="console-box" id="consoleBox">
+                [SYSTEM] Initializing Soul Arena: Etherfall Local Microservice Monitor...
+[SYSTEM] Querying http://localhost:8000/health...
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Soul Arena: Etherfall &copy; 2026. All Rights Reserved. Built with C# & FastAPI.</p>
+    </footer>
+
+    <script>
+        async function loadFighters() {
+            try {
+                const res = await fetch('/api/v1/characters');
+                const fighters = await res.json();
+                const grid = document.getElementById('fighterGrid');
+                grid.innerHTML = '';
+                
+                fighters.forEach(f => {
+                    const card = document.createElement('div');
+                    card.className = 'fighter-card';
+                    card.innerHTML = `
+                        <span class="fighter-elem-badge elem-${f.element.replace(' ', '')}">${f.element}</span>
+                        <h4 class="fighter-name">${f.display_name || f.name}</h4>
+                        <div class="fighter-title">${f.title}</div>
+                        <div class="fighter-meta">
+                            <span>Role: <strong>${f.role}</strong></span>
+                            <span>Weapon: <strong>${f.weapon}</strong></span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (err) {
+                console.error("Failed loading fighters:", err);
+            }
+        }
+
+        async function fetchLiveTelemetry() {
+            const consoleBox = document.getElementById('consoleBox');
+            consoleBox.innerHTML += `\\n[API] Sending health probe to /health at ${new Date().toLocaleTimeString()}...`;
+            try {
+                const res = await fetch('/health');
+                const data = await res.json();
+                consoleBox.innerHTML += `\\n[SUCCESS] Status: ${data.status} | Service: ${data.service} | Mode: ${data.mode}`;
+                consoleBox.scrollTop = consoleBox.scrollHeight;
+            } catch (err) {
+                consoleBox.innerHTML += `\\n[ERROR] Health probe failed: ${err.message}`;
+            }
+        }
+
+        loadFighters();
+        fetchLiveTelemetry();
+    </script>
+</body>
+</html>
