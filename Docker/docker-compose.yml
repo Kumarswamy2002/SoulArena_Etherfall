@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: soularena-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: soularena
+      POSTGRES_PASSWORD: soularenapass
+      POSTGRES_DB: soularenadb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U soularena -d soularenadb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: soularena-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ..
+      dockerfile: Docker/Dockerfile.backend
+    container_name: soularena-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://soularena:soularenapass@postgres:5432/soularenadb
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=soul-arena-etherfall-ultra-secure-jwt-secret-key-2026
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
+  redis_data:

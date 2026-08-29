@@ -1,0 +1,32 @@
+# Dockerfile for Unity headless build pipeline and validation
+FROM unityci/editor:ubuntu-2022.3.20f1-linux-il2cpp-3.0.0 AS unity-builder
+
+WORKDIR /project
+
+# Copy project source
+COPY . .
+
+# Run PlayMode & EditMode automated tests
+RUN unity-editor \
+    -batchmode \
+    -nographics \
+    -silent-crashes \
+    -projectPath . \
+    -runTests \
+    -testPlatform EditMode \
+    -testResults /project/test-results-editmode.xml \
+    -logFile /project/unity-editmode.log
+
+# Build Standalone Linux / Windows binaries
+RUN unity-editor \
+    -batchmode \
+    -nographics \
+    -silent-crashes \
+    -projectPath . \
+    -buildLinux64Player /project/Builds/Linux/SoulArena.x86_64 \
+    -logFile /project/unity-build.log
+
+FROM alpine:latest AS artifact-packager
+WORKDIR /builds
+COPY --from=unity-builder /project/Builds /builds
+CMD ["tar", "-czf", "soularena-linux-release.tar.gz", "."]
