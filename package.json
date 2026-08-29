@@ -1,0 +1,25 @@
+{
+  "name": "soul-arena-etherfall",
+  "version": "1.0.0",
+  "description": "Original-IP 3D Competitive Fighting Arena / Action RPG & Backend Services",
+  "private": true,
+  "scripts": {
+    "start": "python main.py",
+    "dev": "uvicorn Backend.app.main:app --reload --port 8000",
+    "test": "pytest Backend/tests/ -v",
+    "build": "python -m pip install -r Backend/requirements.txt",
+    "docker:up": "cd Docker && docker compose up --build -d",
+    "docker:down": "cd Docker && docker compose down"
+  },
+  "keywords": [
+    "fighting-game",
+    "unity",
+    "csharp",
+    "fastapi",
+    "rollback-netcode",
+    "action-rpg",
+    "etherfall"
+  ],
+  "author": "Soul Arena Team",
+  "license": "UNLICENSED"
+}

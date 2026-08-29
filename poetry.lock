@@ -1,0 +1,47 @@
+# Poetry lockfile for Soul Arena: Etherfall
+[[package]]
+name = "fastapi"
+version = "0.110.0"
+description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
+optional = false
+python-versions = ">=3.8"
+
+[[package]]
+name = "pydantic"
+version = "2.6.4"
+description = "Data validation using Python type hints"
+optional = false
+python-versions = ">=3.8"
+
+[[package]]
+name = "sqlalchemy"
+version = "2.0.28"
+description = "Database Abstraction Library"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
+name = "asyncpg"
+version = "0.29.0"
+description = "An asyncio PostgreSQL driver"
+optional = false
+python-versions = ">=3.8"
+
+[[package]]
+name = "redis"
+version = "5.0.3"
+description = "Python client for Redis key-value store"
+optional = false
+python-versions = ">=3.8"
+
+[[package]]
+name = "bcrypt"
+version = "4.1.2"
+description = "Modern password hashing for your software and your servers"
+optional = false
+python-versions = ">=3.7"
+
+[metadata]
+lock-version = "2.0"
+python-versions = ">=3.11"
+content-hash = "a1b2c3d4e5f60718293a4b5c6d7e8f901234567890abcdef"
