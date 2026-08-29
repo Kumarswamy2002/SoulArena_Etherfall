@@ -57,6 +57,7 @@ jobs:
           DATABASE_URL: postgresql+asyncpg://soularena:soularenapass@localhost:5432/soularenadb
           REDIS_URL: redis://localhost:6379/0
           SECRET_KEY: test-secret-key-for-github-actions-ci-2026
+          PYTHONPATH: .
         run: |
           pytest Backend/tests/ -v --junitxml=backend-test-results.xml
 
